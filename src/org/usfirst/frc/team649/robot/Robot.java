@@ -54,12 +54,12 @@ public class Robot extends IterativeRobot {
 
 	// button declaration(names should be changed according to function)
 	// declaration of left joystick buttons
-	int leftJoyButton0 = 0;
-	int leftJoyButton1 = 1;
-	int leftJoyButton2 = 2;
-	int leftJoyButton3 = 3;
-	int leftJoyButton4 = 4;
-	int leftJoyButton5 = 5;
+	int intakeButton = 0;
+	int purgeButton = 1;
+	int encoderResetButton = 2;
+	int counterResetButton = 3;
+	int leftRunShooter = 4;
+	int leftReverseShooter = 5;
 	int leftJoyButton6 = 6;
 	int leftJoyButton7 = 7;
 	int leftJoyButton8 = 8;
@@ -72,8 +72,8 @@ public class Robot extends IterativeRobot {
 	int rightJoyButton1 = 1;
 	int rightJoyButton2 = 2;
 	int rightJoyButton3 = 3;
-	int rightJoyButton4 = 4;
-	int rightJoyButton5 = 5;
+	int rightRunShooter = 4;
+	int rightReverseShooter = 5;
 	int rightJoyButton6 = 6;
 	int rightJoyButton7 = 7;
 	int rightJoyButton8 = 8;
@@ -166,34 +166,34 @@ public class Robot extends IterativeRobot {
 		;
 
 		// intake/purge
-		if (leftJoy.getRawButton(leftJoyButton0)) {
+		if (leftJoy.getRawButton(intakeButton)) {
 			setRollerSpeed(INTAKE_SPEED);
-		} else if (leftJoy.getRawButton(leftJoyButton1)) {
+		} else if (leftJoy.getRawButton(purgeButton)) {
 			setRollerSpeed(PURGE_SPEED);
 		} else {
 			setRollerSpeed(0);
 		}
 
 		// shooter pivot
-		if (leftJoy.getRawButton(leftJoyButton2)) {
+		if (leftJoy.getRawButton(encoderResetButton)) {
 			encoder1.reset();
 			encoder2.reset();
 		}
-		if (leftJoy.getRawButton(leftJoyButton3)) {
+		if (leftJoy.getRawButton(counterResetButton)) {
 			counter.reset();
 		}
-		if (leftJoy.getRawButton(leftJoyButton4)
-				&& rightJoy.getRawButton(rightJoyButton4)) {
+		if (leftJoy.getRawButton(leftRunShooter)
+				&& rightJoy.getRawButton(rightRunShooter)) {
 			runShooter(1.0);
 		}
-		if (leftJoy.getRawButton(leftJoyButton5)
-				&& rightJoy.getRawButton(rightJoyButton5)) {
+		if (leftJoy.getRawButton(leftReverseShooter)
+				&& rightJoy.getRawButton(rightReverseShooter)) {
 			runShooter(-1.0);
 		}
-		if (!leftJoy.getRawButton(leftJoyButton5)
-				&& !rightJoy.getRawButton(rightJoyButton5)
-				|| !leftJoy.getRawButton(leftJoyButton4)
-				&& !rightJoy.getRawButton(rightJoyButton4)) {
+		if (!leftJoy.getRawButton(leftReverseShooter)
+				&& !rightJoy.getRawButton(rightReverseShooter)
+				|| !leftJoy.getRawButton(leftRunShooter)
+				&& !rightJoy.getRawButton(rightRunShooter)) {
 			runShooter(0.0);
 		}
 
