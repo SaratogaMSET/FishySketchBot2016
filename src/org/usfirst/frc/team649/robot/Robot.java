@@ -1,10 +1,14 @@
 package org.usfirst.frc.team649.robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot{
 	final String defaultAuto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
@@ -30,6 +34,11 @@ public class Robot extends IterativeRobot {
 	public static final double PURGE_SPEED = -1;
 	boolean SolenoidState1;
 	boolean SolenoidState2;
+	public static final int FL_MOTOR = 0;
+	public static final int FR_MOTOR = 0;
+	public static final int BR_MOTOR = 0;
+	public static final int BL_MOTOR = 0;
+	public RobotDrive drivetrain = new RobotDrive(FL_MOTOR,FR_MOTOR,BR_MOTOR,BL_MOTOR);
 	
 	//add more joysticks, motors, etc here if necessary(probably necessary)
 	
@@ -59,11 +68,7 @@ public class Robot extends IterativeRobot {
 		
 		//true is open false is closed
 		SolenoidState1 = true;
-		SolenoidState2 = true;
-		
-		
-		
-		
+		SolenoidState2 = true;	
 	}
 
 	/**
@@ -103,42 +108,38 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		forwardDrive(getDriveForward(),getDriveRotation());
-		if(joy1.getRawButton(0))
-		{
+		//driving
+		drivetrain.tankDrive(joy1, joy2);
+		
+		//intake/purge
+		if(joy1.getRawButton(0)){
 			setRollerSpeed(INTAKE_SPEED);
 		}
-		else if(joy1.getRawButton(0))
-		{
+		else if(joy1.getRawButton(0)){
 			setRollerSpeed(PURGE_SPEED);
 		}
-		else
-		{
+		else{
 			setRollerSpeed(0);
 		}
 		
+		
+		//shooter pivot
 		if(joy1.getRawButton(0) && joy1.getRawButton(0))
 		{
 			//implementation code for shooterPivot
 		}
-		
 		//implementation code for SmartDashboard information
 	}
 	
 
+	private PIDController getPIDController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void setRollerSpeed(double intakeSpeed) {
 		//implementation code for the intake Rollers(Victors)
 		
-	}
-
-	private void forwardDrive(Object driveForward, Object driveRotation) {
-		//implementation code for driving forward
-		
-	}
-
-	private double getDriveRotation() {
-		//implementation code for driving with Rotation
-		return 0;
 	}
 
 	public double getDriveForward() {
