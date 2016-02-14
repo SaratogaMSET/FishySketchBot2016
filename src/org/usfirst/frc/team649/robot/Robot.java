@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot{
+public class Robot extends IterativeRobot {
 	final String defaultAuto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
@@ -40,21 +40,20 @@ public class Robot extends IterativeRobot{
 	public static final int FR_MOTOR = 0;
 	public static final int BR_MOTOR = 0;
 	public static final int BL_MOTOR = 0;
-	public RobotDrive drivetrain = new RobotDrive(FL_MOTOR,FR_MOTOR,BR_MOTOR,BL_MOTOR);
+	public RobotDrive drivetrain = new RobotDrive(FL_MOTOR, FR_MOTOR, BR_MOTOR,
+			BL_MOTOR);
 	public static final int[] SHOOTER_MOTOR_PORTS = { 4, 5 };
 	public static final int[] ENCODER1 = { 0, 1 };
 	public static final int[] ENCODER2 = { 2, 3 };
-	public static final double ENCODER_DISTANCE_PER_PULSE = 0; 
+	public static final double ENCODER_DISTANCE_PER_PULSE = 0;
 	public Counter counter;
 	public Victor motor1;
 	public Victor motor2;
 	public Encoder encoder1;
 	public Encoder encoder2;
 
-	
-	
-	//button declaration(names should be changed according to function)
-		//declaration of left joystick buttons
+	// button declaration(names should be changed according to function)
+	// declaration of left joystick buttons
 	int leftJoyButton0 = 0;
 	int leftJoyButton1 = 1;
 	int leftJoyButton2 = 2;
@@ -67,8 +66,8 @@ public class Robot extends IterativeRobot{
 	int leftJoyButton9 = 9;
 	int leftJoyButton10 = 10;
 	int leftJoyButton11 = 11;
-	
-		//declaration of right joystick buttons
+
+	// declaration of right joystick buttons
 	int rightJoyButton0 = 0;
 	int rightJoyButton1 = 1;
 	int rightJoyButton2 = 2;
@@ -81,48 +80,48 @@ public class Robot extends IterativeRobot{
 	int rightJoyButton9 = 9;
 	int rightJoyButton10 = 10;
 	int rightJoyButton11 = 11;
-	
-	//add more joysticks, motors, etc here if necessary(probably necessary)
-	
+
+	// add more joysticks, motors, etc here if necessary(probably necessary)
+
 	public void robotInit() {
 		chooser = new SendableChooser();
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
-		
+
 		leftJoy = new Joystick(0);
 		rightJoy = new Joystick(1);
 		manualJoy = new Joystick(2);
-		
+
 		roller1 = new Victor(0);
 		roller2 = new Victor(0);
 		roller3 = new Victor(0);
 		roller4 = new Victor(0);
-		
-		solenoidIntake1 = new DoubleSolenoid(0,0);
-		solenoidIntake2 = new DoubleSolenoid(0,0);
-		
+
+		solenoidIntake1 = new DoubleSolenoid(0, 0);
+		solenoidIntake2 = new DoubleSolenoid(0, 0);
+
 		motors = new Talon[4];
 		motors[0] = new Talon(0);
 		motors[1] = new Talon(0);
 		motors[2] = new Talon(0);
 		motors[3] = new Talon(0);
-		
-		
-		//true is open false is closed
+
+		// true is open false is closed
 		SolenoidState1 = true;
 		SolenoidState2 = true;
-		
+
 		motor1 = new Victor(SHOOTER_MOTOR_PORTS[0]);
 		motor2 = new Victor(SHOOTER_MOTOR_PORTS[1]);
-		encoder1 = new Encoder(ENCODER1[0],ENCODER1[1], false, EncodingType.k2X);
-		encoder2 = new Encoder(ENCODER2[0],ENCODER2[1], false, EncodingType.k2X);
+		encoder1 = new Encoder(ENCODER1[0], ENCODER1[1], false,
+				EncodingType.k2X);
+		encoder2 = new Encoder(ENCODER2[0], ENCODER2[1], false,
+				EncodingType.k2X);
 		encoder1.setDistancePerPulse(ENCODER_DISTANCE_PER_PULSE);
 		encoder2.setDistancePerPulse(ENCODER_DISTANCE_PER_PULSE);
 		counter.setReverseDirection(false);
-		counter.setDistancePerPulse(ENCODER_DISTANCE_PER_PULSE);    
-		
-		
+		counter.setDistancePerPulse(ENCODER_DISTANCE_PER_PULSE);
+
 	}
 
 	/**
@@ -162,58 +161,51 @@ public class Robot extends IterativeRobot{
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		//driving
-		drivetrain.tankDrive(leftJoy, rightJoy);;
-		
-		//intake/purge
-		if(leftJoy.getRawButton(leftJoyButton0)){
+		// driving
+		drivetrain.tankDrive(leftJoy, rightJoy);
+		;
+
+		// intake/purge
+		if (leftJoy.getRawButton(leftJoyButton0)) {
 			setRollerSpeed(INTAKE_SPEED);
-		}
-		else if(leftJoy.getRawButton(leftJoyButton1)){
+		} else if (leftJoy.getRawButton(leftJoyButton1)) {
 			setRollerSpeed(PURGE_SPEED);
-		}
-		else{
+		} else {
 			setRollerSpeed(0);
 		}
-		
-		
-		//shooter pivot
-		if(leftJoy.getRawButton(leftJoyButton3) && rightJoy.getRawButton(rightJoyButton3))
-		{
-			
-		}
-		if(leftJoy.getRawButton(leftJoyButton4))
-		{
+
+		// shooter pivot
+		if (leftJoy.getRawButton(leftJoyButton2)) {
 			encoder1.reset();
 			encoder2.reset();
 		}
-		if(leftJoy.getRawButton(leftJoyButton5))
-		{
+		if (leftJoy.getRawButton(leftJoyButton3)) {
 			counter.reset();
 		}
-		if(leftJoy.getRawButton(leftJoyButton6) && rightJoy.getRawButton(rightJoyButton6))
-		{
+		if (leftJoy.getRawButton(leftJoyButton4)
+				&& rightJoy.getRawButton(rightJoyButton4)) {
 			runShooter(1.0);
 		}
-		if(leftJoy.getRawButton(leftJoyButton7)&& rightJoy.getRawButton(rightJoyButton7))
-		{
+		if (leftJoy.getRawButton(leftJoyButton5)
+				&& rightJoy.getRawButton(rightJoyButton5)) {
 			runShooter(-1.0);
 		}
-		if(!leftJoy.getRawButton(leftJoyButton7) && !rightJoy.getRawButton(rightJoyButton7) 
-				|| !leftJoy.getRawButton(leftJoyButton6) && !rightJoy.getRawButton(rightJoyButton6))
-		{
+		if (!leftJoy.getRawButton(leftJoyButton5)
+				&& !rightJoy.getRawButton(rightJoyButton5)
+				|| !leftJoy.getRawButton(leftJoyButton4)
+				&& !rightJoy.getRawButton(rightJoyButton4)) {
 			runShooter(0.0);
 		}
-		
-		//implementation code for SmartDashboard information
+
+		// implementation code for SmartDashboard information
 	}
 
 	private void setRollerSpeed(double intakeSpeed) {
-		//implementation code for the intake Rollers(Victor)
-		
+		// implementation code for the intake Rollers(Victor)
+
 	}
-	public void runShooter(Double power)
-	{
+
+	public void runShooter(Double power) {
 		motor1.set(power);
 		motor2.set(power);
 	}
