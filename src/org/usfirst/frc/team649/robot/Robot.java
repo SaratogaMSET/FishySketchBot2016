@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -54,8 +55,8 @@ public class Robot extends IterativeRobot {
 	int counterResetButton = 3;
 	int leftRunShooter = 4;
 	int leftReverseShooter = 5;
-	int leftJoyButton6 = 6;
-	int leftJoyButton7 = 7;
+	int forwardSolenoids = 6;
+	int reverseSolenoids = 7;
 	int leftJoyButton8 = 8;
 	int leftJoyButton9 = 9;
 	int leftJoyButton10 = 10;
@@ -159,6 +160,7 @@ public class Robot extends IterativeRobot {
 		driveFwdRot(getDriveForward(), getDriveRotate());
 		// intake/purge
 		intakePurgeSubsystem();
+		setSolenoids();
 		// shooter pivot
 		shooterPivot();
 		// implementation code for SmartDashboard information
@@ -237,6 +239,24 @@ public class Robot extends IterativeRobot {
 		// left
 		motors[2].set(left);
 		motors[3].set(left);
+	}
+	public void setSolenoids()
+	{
+		if(leftJoy.getRawButton(forwardSolenoids))
+		{
+			solenoidIntake1.set(Value.kForward);
+			solenoidIntake2.set(Value.kForward);	
+		}
+		else if(leftJoy.getRawButton(reverseSolenoids))
+		{
+			solenoidIntake1.set(Value.kReverse);
+			solenoidIntake2.set(Value.kReverse);
+		}
+		else
+		{
+			solenoidIntake1.set(Value.kOff);
+			solenoidIntake2.set(Value.kOff);
+		}
 	}
 
 	/**
