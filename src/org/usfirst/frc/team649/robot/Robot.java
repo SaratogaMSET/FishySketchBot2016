@@ -38,24 +38,35 @@ public class Robot extends IterativeRobot {
 	public static final double PURGE_SPEED = -1;// max purge speed
 	boolean SolenoidState1;// current state of solenoid1
 	boolean SolenoidState2;// current state of solenoid2
-	public static final int[] SHOOTER_MOTOR_PORTS = { 4, 5 };// ports that the
-															 // two motors of
-															 // the shooter
-															 // are plugged
-															 // into
+	public static final int[] SHOOTER_PIVOT_MOTOR_PORTS = { 4, 5 };// ports that
+																	// the
+	// two motors of
+	// the shooter
+	// are plugged
+	// into
 	public static final int[] ENCODER1 = { 0, 1 };// first encoder
 	public static final int[] ENCODER2 = { 2, 3 };// second encoder
 	public static final double ENCODER_DISTANCE_PER_PULSE = 0;// change this,
-															  // but its the
-															  // distance
-														      // passed in the
-														      // intervals of
-															  // pulses
+																// but its the
+																// distance
+																// passed in the
+																// intervals of
+																// pulses
 	public Counter counter;// counter for hall effect of shooter pivot
 	public Victor motor1;// first motor for shooter pivot
 	public Victor motor2;// second motor for shooter pivotr
 	public Encoder encoder1;// encoder for shooterpiv
 	public Encoder encoder2;// encoder for shooterpiv
+
+	public static final int[] SHOOTER_MOTOR_PORTS = { 6, 7 };
+	public static final int[] SHOOTER_ENCODER_1 = { 0, 0 };
+	public static final int[] SHOOTER_ENCODER_2 = { 0, 0 };
+	public static final int[] PUNCH_SOLENOID_PORTS = { 0, 0 };
+	public Victor shooterMotor1;
+	public Victor shooterMotor2;
+	public Encoder shooterEncoder1;
+	public Encoder shooterEncoder2;
+	public DoubleSolenoid shooterPunch;
 
 	// button declaration(names should be changed according to function)
 	// declaration of left joystick buttons
@@ -116,8 +127,8 @@ public class Robot extends IterativeRobot {
 		SolenoidState1 = true;
 		SolenoidState2 = true;
 
-		motor1 = new Victor(SHOOTER_MOTOR_PORTS[0]);
-		motor2 = new Victor(SHOOTER_MOTOR_PORTS[1]);
+		motor1 = new Victor(SHOOTER_PIVOT_MOTOR_PORTS[0]);
+		motor2 = new Victor(SHOOTER_PIVOT_MOTOR_PORTS[1]);
 		encoder1 = new Encoder(ENCODER1[0], ENCODER1[1], false,
 				EncodingType.k2X);
 		encoder2 = new Encoder(ENCODER2[0], ENCODER2[1], false,
@@ -127,6 +138,14 @@ public class Robot extends IterativeRobot {
 		counter.setReverseDirection(false);
 		counter.setDistancePerPulse(ENCODER_DISTANCE_PER_PULSE);
 
+		shooterMotor1 = new Victor(SHOOTER_MOTOR_PORTS[0]);
+		shooterMotor2 = new Victor(SHOOTER_MOTOR_PORTS[1]);
+		shooterEncoder1 = new Encoder(SHOOTER_ENCODER_1[0],
+				SHOOTER_ENCODER_1[1], false, EncodingType.k2X);
+		shooterEncoder2 = new Encoder(SHOOTER_ENCODER_2[0],
+				SHOOTER_ENCODER_2[1], false, EncodingType.k2X);
+		shooterPunch = new DoubleSolenoid(PUNCH_SOLENOID_PORTS[0],
+				PUNCH_SOLENOID_PORTS[1]);
 	}
 
 	public void autonomousInit() {
@@ -154,7 +173,6 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during operator control
 	 */
-	@SuppressWarnings("deprecation")
 	public void teleopPeriodic() {
 		// driving
 		driveFwdRot(getDriveForward(), getDriveRotate());
@@ -163,6 +181,10 @@ public class Robot extends IterativeRobot {
 		setSolenoids();
 		// shooter pivot
 		shooterPivot();
+		// shooter subsystem
+		shooterSubsystem();
+		reverseShootSubsystem();
+		ShootSubsystemOff();
 		// implementation code for SmartDashboard information
 	}
 
@@ -251,6 +273,28 @@ public class Robot extends IterativeRobot {
 		} else {
 			solenoidIntake1.set(Value.kOff);
 			solenoidIntake2.set(Value.kOff);
+		}
+	}
+
+	public void shooterSubsystem() {
+		if (leftJoy.getRawButton(leftJoyButton8)) {
+			shooterMotor1.set(1.0);
+			shooterMotor2.set(1.0);
+		}
+	}
+
+	public void reverseShootSubsystem() {
+		if (leftJoy.getRawButton(leftJoyButton9)) {
+			shooterMotor1.set(-1.0);
+			shooterMotor2.set(-1.0);
+		}
+	}
+
+	public void ShootSubsystemOff() {
+		if (!leftJoy.getRawButton(leftJoyButton9)
+				&& (!leftJoy.getRawButton(leftJoyButton8))) {
+			shooterMotor1.set(0.0);
+			shooterMotor2.set(0.0);
 		}
 	}
 
