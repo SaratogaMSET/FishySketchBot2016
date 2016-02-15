@@ -163,18 +163,33 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		// driving
 		drivetrain.tankDrive(leftJoy, rightJoy);
-		;
 
 		// intake/purge
-		if (leftJoy.getRawButton(intakeButton)) {
-			setRollerSpeed(INTAKE_SPEED);
-		} else if (leftJoy.getRawButton(purgeButton)) {
-			setRollerSpeed(PURGE_SPEED);
-		} else {
-			setRollerSpeed(0);
-		}
+		intakePurgeSubsystem();
+		
 
 		// shooter pivot
+		shooterPivot();
+		
+
+		// implementation code for SmartDashboard information
+	}
+
+	private void setRollerSpeed(double intakeSpeed) {
+		// implementation code for the intake Rollers(Victor)
+		roller1.set(intakeSpeed);
+		roller2.set(intakeSpeed);
+		roller3.set(-intakeSpeed);
+		roller4.set(-intakeSpeed);
+
+	}
+
+	public void runShooter(Double power) {
+		motor1.set(power);
+		motor2.set(power);
+	}
+	public void shooterPivot()
+	{
 		if (leftJoy.getRawButton(encoderResetButton)) {
 			encoder1.reset();
 			encoder2.reset();
@@ -196,18 +211,16 @@ public class Robot extends IterativeRobot {
 				&& !rightJoy.getRawButton(rightRunShooter)) {
 			runShooter(0.0);
 		}
-
-		// implementation code for SmartDashboard information
 	}
-
-	private void setRollerSpeed(double intakeSpeed) {
-		// implementation code for the intake Rollers(Victor)
-
-	}
-
-	public void runShooter(Double power) {
-		motor1.set(power);
-		motor2.set(power);
+	public void intakePurgeSubsystem()
+	{
+		if (leftJoy.getRawButton(intakeButton)) {
+			setRollerSpeed(INTAKE_SPEED);
+		} else if (leftJoy.getRawButton(purgeButton)) {
+			setRollerSpeed(PURGE_SPEED);
+		} else {
+			setRollerSpeed(0);
+		}
 	}
 
 	/**
