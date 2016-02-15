@@ -36,12 +36,6 @@ public class Robot extends IterativeRobot {
 	public static final double PURGE_SPEED = -1;
 	boolean SolenoidState1;
 	boolean SolenoidState2;
-	public static final int FL_MOTOR = 0;
-	public static final int FR_MOTOR = 0;
-	public static final int BR_MOTOR = 0;
-	public static final int BL_MOTOR = 0;
-	public RobotDrive drivetrain = new RobotDrive(FL_MOTOR, FR_MOTOR, BR_MOTOR,
-			BL_MOTOR);
 	public static final int[] SHOOTER_MOTOR_PORTS = { 4, 5 };
 	public static final int[] ENCODER1 = { 0, 1 };
 	public static final int[] ENCODER2 = { 2, 3 };
@@ -162,16 +156,11 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		// driving
-		drivetrain.tankDrive(leftJoy, rightJoy);
-
+		driveFwdRot(getDriveForward(), getDriveRotate());
 		// intake/purge
 		intakePurgeSubsystem();
-		
-
 		// shooter pivot
 		shooterPivot();
-		
-
 		// implementation code for SmartDashboard information
 	}
 
@@ -188,8 +177,8 @@ public class Robot extends IterativeRobot {
 		motor1.set(power);
 		motor2.set(power);
 	}
-	public void shooterPivot()
-	{
+
+	public void shooterPivot() {
 		if (leftJoy.getRawButton(encoderResetButton)) {
 			encoder1.reset();
 			encoder2.reset();
@@ -212,8 +201,8 @@ public class Robot extends IterativeRobot {
 			runShooter(0.0);
 		}
 	}
-	public void intakePurgeSubsystem()
-	{
+
+	public void intakePurgeSubsystem() {
 		if (leftJoy.getRawButton(intakeButton)) {
 			setRollerSpeed(INTAKE_SPEED);
 		} else if (leftJoy.getRawButton(purgeButton)) {
@@ -221,6 +210,33 @@ public class Robot extends IterativeRobot {
 		} else {
 			setRollerSpeed(0);
 		}
+	}
+
+	public double getDriveForward() {
+		return -leftJoy.getY();
+	}
+
+	public double getDriveRotate() {
+		final double turningValue = rightJoy.getX();
+		final double sign = turningValue < 0 ? -1 : 1;
+		return Math.pow(Math.abs(turningValue), 1.4) * sign;
+	}
+
+	public void driveFwdRot(double fwd, double rot) {
+		double left = fwd + rot, right = fwd - rot;
+		double max = Math.max(1, Math.max(Math.abs(left), Math.abs(right)));
+		left /= max;
+		right /= max;
+		rawDrive(left, right);
+	}
+
+	public void rawDrive(double left, double right) {
+		// right
+		motors[0].set(-right);
+		motors[1].set(-right);
+		// left
+		motors[2].set(left);
+		motors[3].set(left);
 	}
 
 	/**
