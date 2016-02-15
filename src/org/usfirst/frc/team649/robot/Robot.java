@@ -78,8 +78,8 @@ public class Robot extends IterativeRobot {
 	int leftReverseShooter = 5;
 	int forwardSolenoids = 6;
 	int reverseSolenoids = 7;
-	int leftJoyButton8 = 8;
-	int leftJoyButton9 = 9;
+	int runShooterForward = 8;
+	int runShooterReverse = 9;
 	int leftJoyButton10 = 10;
 	int leftJoyButton11 = 11;
 
@@ -277,22 +277,22 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void shooterSubsystem() {
-		if (leftJoy.getRawButton(leftJoyButton8)) {
+		if (leftJoy.getRawButton(runShooterForward)) {
 			shooterMotor1.set(1.0);
 			shooterMotor2.set(1.0);
 		}
 	}
 
 	public void reverseShootSubsystem() {
-		if (leftJoy.getRawButton(leftJoyButton9)) {
+		if (leftJoy.getRawButton(runShooterReverse)) {
 			shooterMotor1.set(-1.0);
 			shooterMotor2.set(-1.0);
 		}
 	}
 
 	public void ShootSubsystemOff() {
-		if (!leftJoy.getRawButton(leftJoyButton9)
-				&& (!leftJoy.getRawButton(leftJoyButton8))) {
+		if (!leftJoy.getRawButton(runShooterForward)
+				&& (!leftJoy.getRawButton(runShooterReverse))) {
 			shooterMotor1.set(0.0);
 			shooterMotor2.set(0.0);
 		}
