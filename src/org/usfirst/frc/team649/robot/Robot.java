@@ -1,5 +1,5 @@
 package org.usfirst.frc.team649.robot;
-
+//import statements
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -26,26 +26,26 @@ public class Robot extends IterativeRobot {
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser chooser;
-	Victor roller1, roller2, roller3, roller4;
-	DoubleSolenoid solenoidIntake1, solenoidIntake2;
-	Talon[] motors;
-	Victor[] shooterPivotMotors;
-	Joystick leftJoy;
-	Joystick rightJoy;
-	Joystick manualJoy;
-	public static final double INTAKE_SPEED = 1;
-	public static final double PURGE_SPEED = -1;
-	boolean SolenoidState1;
-	boolean SolenoidState2;
-	public static final int[] SHOOTER_MOTOR_PORTS = { 4, 5 };
-	public static final int[] ENCODER1 = { 0, 1 };
-	public static final int[] ENCODER2 = { 2, 3 };
-	public static final double ENCODER_DISTANCE_PER_PULSE = 0;
-	public Counter counter;
-	public Victor motor1;
-	public Victor motor2;
-	public Encoder encoder1;
-	public Encoder encoder2;
+	Victor roller1, roller2, roller3, roller4;//rollers for intake
+	DoubleSolenoid solenoidIntake1, solenoidIntake2;//solenoids for intake
+	Talon[] motors;//motors for driving(talons)
+	Victor[] shooterPivotMotors;//motors for shooting(victors)
+	Joystick leftJoy;//left joystick
+	Joystick rightJoy;//right joystick
+	Joystick manualJoy;//manual logitech f310 joystick
+	public static final double INTAKE_SPEED = 1;//max intake speed
+	public static final double PURGE_SPEED = -1;//max purge speed
+	boolean SolenoidState1;//current state of solenoid1
+	boolean SolenoidState2;//current state of solenoid2
+	public static final int[] SHOOTER_MOTOR_PORTS = { 4, 5 };//ports that the two motors of the shooter are plugged into
+	public static final int[] ENCODER1 = { 0, 1 };//first encoder
+	public static final int[] ENCODER2 = { 2, 3 };//second encoder
+	public static final double ENCODER_DISTANCE_PER_PULSE = 0;//change this, but its the distance passed in the intervals of pulses
+	public Counter counter;//counter for hall effect of shooter pivot
+	public Victor motor1;//first motor for shooter pivot
+	public Victor motor2;//second motor for shooter pivotr
+	public Encoder encoder1;//encoder for shooterpiv
+	public Encoder encoder2;//encoder for shooterpiv
 
 	// button declaration(names should be changed according to function)
 	// declaration of left joystick buttons
